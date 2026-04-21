@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Indahnya Berbagi - Mustahik Zakat</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.85);
+            --glass-border: rgba(255, 255, 255, 0.3);
+            --shadow-soft: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            margin: 0; padding: 0;
+            font-family: 'Nunito', sans-serif;
+            background-color: #f4f7f6;
+            overflow: hidden; color: #333;
+            touch-action: none;
+        }
+
+        .slide-container { 
+            width: 100vw; height: 100vh; position: relative; z-index: 10; 
+        }
+
+        .slide {
+            width: 100%; height: 100%; position: absolute; top: 0; left: 0;
+            opacity: 0; transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            text-align: center; padding: 2rem 2rem 100px 2rem; /* Padding bawah ekstra untuk dock */
+            box-sizing: border-box; visibility: hidden; z-index: 1;
+        }
+        
+        .slide.active { opacity: 1; visibility: visible; z-index: 2; }
+        
+        /* Palet Warna Modern */
+        #slide1 { background: linear-gradient(135deg, #FFD166 0%, #FFB703 100%); }
+        #slide2 { background: linear-gradient(135deg, #06D6A0 0%, #04A77D 100%); color: white;}
+        #slide3 { background: linear-gradient(135deg, #118AB2 0%, #0C637F 100%); color: white;}
+        #slide4 { background: linear-gradient(135deg, #073B4C 0%, #031A22 100%); color: white;}
+
+        h1 { font-size: 4.5rem; margin-bottom: 0.5rem; letter-spacing: -1px; text-shadow: 2px 2px 10px rgba(0,0,0,0.1); }
+        h2 { font-size: 3rem; margin-bottom: 1.5rem; font-weight: 900; }
+        p { font-size: 1.6rem; max-width: 800px; line-height: 1.6; margin: 10px 0; font-weight: 400; }
+        
+        .video-wrapper {
+            width: 80%; max-width: 750px; aspect-ratio: 16 / 9;
+            background: #000; border-radius: 24px; overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2); border: 4px solid rgba(255,255,255,0.2);
+        }
+        iframe { width: 100%; height: 100%; border: none; }
+        
+        .mindmap-wrapper {
+            width: 95%; max-width: 1000px; height: 60vh;
+            background: var(--glass-bg); border-radius: 24px; padding: 20px;
+            display: flex; justify-content: center; align-items: center;
+            box-shadow: var(--shadow-soft); backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+        }
+        .mindmap-wrapper img {
+            max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 12px;
+        }
+
+        .lyrics-box {
+            font-size: 1.8rem; font-weight: 700; background: rgba(255,255,255,0.15); 
+            padding: 30px 50px; border-radius: 24px; line-height: 1.8;
+            backdrop-filter: blur(5px); border: 1px solid rgba(255,255,255,0.2);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        /* Kanvas Coretan */
+        #drawCanvas {
+            position: absolute; top: 0; left: 0; width: 100vw; height: 100vh;
+            pointer-events: none; z-index: 50;
+        }
+        #drawCanvas.active { pointer-events: auto; cursor: crosshair; }
+
+        /* Floating Nav Dock Modern */
+        .dock-container {
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+            background: var(--glass-bg); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border); border-radius: 50px;
+            padding: 8px 15px; box-shadow: var(--shadow-soft);
+            display: flex; gap: 10px; align-items: center; z-index: 100;
+            transition: all 0.3s ease;
+        }
+
+        /* Group Kontrol */
+        .controls-group { display: flex; gap: 8px; align-items: center; transition: opacity 0.3s; }
+        #drawControls { display: none; }
+        #drawControls.active { display: flex; }
+        #mainControls.hidden { display: none; }
+
+        button {
+            background: transparent; color: #333; border: none;
+            padding: 10px 20px; font-size: 1.2rem; font-weight: 700;
+            border-radius: 40px; cursor: pointer; transition: all 0.2s ease;
+            font-family: 'Nunito', sans-serif; display: flex; align-items: center; gap: 8px;
+        }
+        button:hover { background-color: rgba(0,0,0,0.05); transform: translateY(-2px); }
+        button:active { transform: translateY(0); }
+        
+        button.btn-primary { background-color: #118AB2; color: white; }
+        button.btn-primary:hover { background-color: #0b6b8a; }
+        button.btn-danger { background-color: #EF476F; color: white; }
+        button.btn-danger:hover { background-color: #d83a5e; }
+        button.btn-icon { padding: 10px 15px; }
+
+        input[type="color"] { 
+            border: none; width: 36px; height: 36px; border-radius: 50%; 
+            cursor: pointer; padding: 0; background: transparent;
+        }
+        input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; }
+        input[type="color"]::-webkit-color-swatch { border: 2px solid white; border-radius: 50%; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+    </style>
+</head>
+<body>
+
+    <canvas id="drawCanvas"></canvas>
+
+    <div class="slide-container">
+        <div class="slide active" id="slide1">
+            <h1>Indahnya Berbagi</h1>
+            <p>Mengenal 8 Golongan Penerima Zakat (Mustahik)</p>
+        </div>
+
+        <div class="slide" id="slide2">
+            <h2>Perjalanan Zakat Kita</h2>
+            <div class="video-wrapper">
+                <iframe src="https://www.youtube.com/embed/o6-ZxWnWnwA?si=d5S1jsZQQMHOVPl1" allowfullscreen></iframe>
+            </div>
+            <p>Amati video di atas. Siapa saja yang menerima bantuan zakat tersebut?</p>
+        </div>
+
+        <div class="slide" id="slide3">
+            <h2>Lengkapi Peta Konsep Ini</h2>
+            <div class="mindmap-wrapper">
+                <img src="https://drive.google.com/uc?export=view&id=1RjT4e2hV0P8ewIlRrJvVyQrC5IobJOul" alt="Peta Konsep Mustahik Zakat">
+            </div>
+        </div>
+
+        <div class="slide" id="slide4">
+            <h2>8 Golongan Mustahik</h2>
+            <div class="lyrics-box">
+                Delapan mustahiq penerima zakat<br>
+                Fakir itu orang tidak punya harta<br>
+                Miskin kurang harta, amil panitia<br>
+                Fisabilillah, pejuang Allah<br><br>
+                Baru masuk Islam, disebut muallaf<br>
+                Riqab itu budak dan hamba sahaya<br>
+                Gharim punya utang, tidak bisa bayar<br>
+                Ibnu sabil itu, di perjalanan
+            </div>
+        </div>
+    </div>
+
+    <div class="dock-container">
+        <div class="controls-group" id="drawControls">
+            <input type="color" id="penColor" value="#EF476F" title="Pilih Warna">
+            <button class="btn-icon" onclick="clearCanvas()" title="Hapus Layar">🗑️ Bersihkan</button>
+            <div style="width: 1px; height: 24px; background: rgba(0,0,0,0.1); margin: 0 5px;"></div>
+            <button class="btn-danger" onclick="toggleDrawMode()">❌ Selesai</button>
+        </div>
+
+        <div class="controls-group" id="mainControls">
+            <button class="btn-icon" onclick="prevSlide()">◀ Mundur</button>
+            <div style="width: 1px; height: 24px; background: rgba(0,0,0,0.1); margin: 0 5px;"></div>
+            <button class="btn-primary" onclick="toggleDrawMode()">🖌️ Mode Tulis</button>
+            <div style="width: 1px; height: 24px; background: rgba(0,0,0,0.1); margin: 0 5px;"></div>
+            <button class="btn-icon" onclick="nextSlide()">Maju ▶</button>
+        </div>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+
+        function showSlide(index) {
+            slides.forEach((slide, i) => {
+                slide.classList.remove('active');
+                if (i === index) slide.classList.add('active');
+            });
+            const iframes = document.querySelectorAll('iframe');
+            iframes.forEach(iframe => { iframe.src = iframe.src; }); // Refresh video agar berhenti
+            clearCanvas(); 
+        }
+
+        function nextSlide() {
+            if (currentSlide < slides.length - 1) currentSlide++;
+            showSlide(currentSlide);
+        }
+
+        function prevSlide() {
+            if (currentSlide > 0) currentSlide--;
+            showSlide(currentSlide);
+        }
+
+        const canvas = document.getElementById('drawCanvas');
+        const ctx = canvas.getContext('2d');
+        let isDrawingMode = false;
+        let isDrawing = false;
+        
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            ctx.lineWidth = 6;
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        function toggleDrawMode() {
+            isDrawingMode = !isDrawingMode;
+            const mainControls = document.getElementById('mainControls');
+            const drawControls = document.getElementById('drawControls');
+            
+            if (isDrawingMode) {
+                canvas.classList.add('active');
+                mainControls.classList.add('hidden');
+                drawControls.classList.add('active');
+            } else {
+                canvas.classList.remove('active');
+                mainControls.classList.remove('hidden');
+                drawControls.classList.remove('active');
+            }
+        }
+
+        function clearCanvas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+
+        function getCoordinates(e) {
+            if (e.touches && e.touches.length > 0) {
+                return { x: e.touches[0].clientX, y: e.touches[0].clientY };
+            }
+            return { x: e.clientX, y: e.clientY };
+        }
+
+        function startDrawing(e) {
+            if (!isDrawingMode) return;
+            isDrawing = true;
+            const pos = getCoordinates(e);
+            ctx.beginPath();
+            ctx.moveTo(pos.x, pos.y);
+            ctx.strokeStyle = document.getElementById('penColor').value;
+            e.preventDefault(); 
+        }
+
+        function draw(e) {
+            if (!isDrawing) return;
+            const pos = getCoordinates(e);
+            ctx.lineTo(pos.x, pos.y);
+            ctx.stroke();
+            e.preventDefault();
+        }
+
+        function stopDrawing() {
+            isDrawing = false;
+            ctx.closePath();
+        }
+
+        canvas.addEventListener('mousedown', startDrawing);
+        canvas.addEventListener('mousemove', draw);
+        canvas.addEventListener('mouseup', stopDrawing);
+        canvas.addEventListener('mouseout', stopDrawing);
+
+        canvas.addEventListener('touchstart', startDrawing, {passive: false});
+        canvas.addEventListener('touchmove', draw, {passive: false});
+        canvas.addEventListener('touchend', stopDrawing);
+
+        document.addEventListener('keydown', (e) => {
+            if (!isDrawingMode) {
+                if (e.key === 'ArrowRight' || e.key === 'Space') nextSlide();
+                else if (e.key === 'ArrowLeft') prevSlide();
+            }
+        });
+    </script>
+</body>
+</html>
