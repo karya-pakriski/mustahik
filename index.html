@@ -8,8 +8,7 @@
     <style>
         :root {
             --glass-bg: rgba(255, 255, 255, 0.85);
-            --glass-border: rgba(255, 255, 255, 0.3);
-            --shadow-soft: 0 8px 32px rgba(0, 0, 0, 0.1);
+            --shadow-soft: 0 8px 32px rgba(0, 0, 0, 0.15);
         }
 
         body {
@@ -17,7 +16,7 @@
             font-family: 'Nunito', sans-serif;
             background-color: #f4f7f6;
             overflow: hidden; color: #333;
-            touch-action: none; /* Mencegah geseran layar saat menggambar */
+            touch-action: none;
         }
 
         .slide-container { 
@@ -28,167 +27,189 @@
             width: 100%; height: 100%; position: absolute; top: 0; left: 0;
             opacity: 0; transition: opacity 0.5s ease-in-out;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
-            text-align: center; padding: 2rem 5rem; box-sizing: border-box; 
+            padding: 5vh 8vw; box-sizing: border-box; text-align: center;
             visibility: hidden; z-index: 1;
         }
         
         .slide.active { opacity: 1; visibility: visible; z-index: 2; }
-        
+
+        /* Footer Global (Hak Cipta) di Tengah Bawah */
+        .footer-identity {
+            position: absolute; bottom: 2vh; left: 0; width: 100%;
+            text-align: center; font-weight: 700;
+            font-size: clamp(0.7rem, 1vw, 1rem); 
+            color: rgba(255,255,255,0.8); text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+            z-index: 100; pointer-events: none;
+        }
+
+        /* Warna Latar */
         #slide1 { background: linear-gradient(135deg, #FFD166 0%, #FFB703 100%); }
         #slide2 { background: linear-gradient(135deg, #06D6A0 0%, #04A77D 100%); color: white;}
         #slide3 { background: linear-gradient(135deg, #118AB2 0%, #0C637F 100%); color: white;}
         #slide4 { background: linear-gradient(135deg, #073B4C 0%, #031A22 100%); color: white;}
 
-        h1 { font-size: 4.5rem; margin-bottom: 0.5rem; text-shadow: 2px 2px 10px rgba(0,0,0,0.1); }
-        h2 { font-size: 3.5rem; margin-bottom: 1.5rem; font-weight: 900; }
-        p { font-size: 1.8rem; max-width: 800px; line-height: 1.6; margin: 10px 0; }
+        /* Tipografi Proporsional & Mengecil */
+        h1 { font-size: clamp(2.5rem, 4vw, 4rem); margin-bottom: 1vh; text-shadow: 2px 2px 10px rgba(0,0,0,0.1); }
+        h2 { font-size: clamp(1.8rem, 3vw, 3rem); margin-bottom: 2vh; font-weight: 900; }
+        p { font-size: clamp(1rem, 1.5vw, 1.5rem); max-width: 900px; line-height: 1.6; margin: 1vh 0; }
         
+        /* Gambar Peta Konsep */
         .mindmap-wrapper {
-            width: 95%; max-width: 1100px; height: 65vh;
-            background: var(--glass-bg); border-radius: 24px; padding: 20px;
+            width: 100%; max-width: 1000px; height: 55vh; max-height: 500px;
+            background: var(--glass-bg); border-radius: 20px; padding: 1.5vh;
             display: flex; justify-content: center; align-items: center;
             box-shadow: var(--shadow-soft); backdrop-filter: blur(10px);
         }
         .mindmap-wrapper img {
-            max-width: 100%; max-height: 100%; object-fit: contain; border-radius: 12px;
+            width: 100%; height: 100%; object-fit: contain; border-radius: 10px;
         }
 
+        /* Kotak Lirik Lagu (Ukuran Disesuaikan Agar Tidak Terpotong) */
         .lyrics-box {
-            font-size: 2rem; font-weight: 700; background: rgba(255,255,255,0.15); 
-            padding: 30px 50px; border-radius: 24px; line-height: 1.8;
+            font-size: clamp(1rem, 1.8vw, 1.8rem); font-weight: 700; 
+            background: rgba(255,255,255,0.15); padding: 2vh 4vw; 
+            border-radius: 20px; line-height: 1.5;
             backdrop-filter: blur(5px); border: 1px solid rgba(255,255,255,0.2);
-            box-shadow: var(--shadow-soft); margin-bottom: 20px;
+            box-shadow: var(--shadow-soft); margin-bottom: 2vh; max-width: 800px;
         }
 
-        /* Identitas Guru */
-        .watermark {
-            position: absolute; bottom: 15px; left: 50%; transform: translateX(-50%);
-            font-size: 1.2rem; font-weight: bold; color: rgba(255,255,255,0.8);
-            background: rgba(0,0,0,0.3); padding: 8px 20px; border-radius: 20px;
-            z-index: 100; pointer-events: none; backdrop-filter: blur(5px);
-        }
-
-        /* Navigasi Kiri Kanan */
+        /* Tombol Navigasi Kiri Kanan */
         .nav-btn {
             position: absolute; top: 50%; transform: translateY(-50%);
-            background: var(--glass-bg); color: #333; border: none;
-            width: 60px; height: 60px; border-radius: 50%; font-size: 2rem;
-            cursor: pointer; box-shadow: var(--shadow-soft); z-index: 100;
-            display: flex; justify-content: center; align-items: center;
-            transition: all 0.2s ease; backdrop-filter: blur(10px);
+            background: rgba(255,255,255,0.3); color: white; border: none;
+            width: clamp(40px, 4vw, 60px); height: clamp(60px, 8vw, 100px); 
+            font-size: clamp(1.5rem, 2.5vw, 2.5rem); border-radius: 15px;
+            cursor: pointer; z-index: 100; display: flex; justify-content: center; align-items: center;
+            transition: all 0.2s ease; backdrop-filter: blur(5px);
         }
-        .nav-btn:hover { background: white; transform: translateY(-50%) scale(1.1); }
-        .prev-btn { left: 20px; }
-        .next-btn { right: 20px; }
+        .nav-btn:hover { background: rgba(255,255,255,0.8); color: #333; transform: translateY(-50%) scale(1.05); }
+        .prev-btn { left: 15px; }
+        .next-btn { right: 15px; }
 
-        /* Mode Tulis */
+        /* Tombol Mode Tulis di Pojok Kanan Atas */
         .draw-toggle {
-            position: absolute; top: 20px; right: 20px;
-            background: var(--glass-bg); border: none; font-size: 2rem;
-            width: 60px; height: 60px; border-radius: 50%; cursor: pointer;
-            box-shadow: var(--shadow-soft); z-index: 101; transition: all 0.2s;
-            display: flex; justify-content: center; align-items: center;
+            position: absolute; top: 3vh; right: 2vw;
+            background: #EF476F; color: white; border: none; 
+            font-size: clamp(1.2rem, 1.8vw, 1.8rem);
+            width: clamp(40px, 4vw, 55px); height: clamp(40px, 4vw, 55px); 
+            border-radius: 50%; cursor: pointer;
+            box-shadow: 0 10px 20px rgba(239,71,111,0.4); z-index: 101; 
+            transition: all 0.2s; display: flex; justify-content: center; align-items: center;
         }
-        .draw-toggle:hover { transform: scale(1.1); background: white; }
+        .draw-toggle:hover { transform: scale(1.1); }
+        .draw-toggle.active { background: #06D6A0; box-shadow: 0 10px 20px rgba(6,214,160,0.4); }
         
         .draw-panel {
-            position: absolute; top: 90px; right: 20px;
+            position: absolute; top: calc(3vh + clamp(40px, 4vw, 55px) + 10px); right: 2vw;
             background: var(--glass-bg); border-radius: 20px; padding: 15px;
-            display: none; flex-direction: column; gap: 10px; z-index: 101;
+            display: none; flex-direction: column; gap: 15px; z-index: 101;
             box-shadow: var(--shadow-soft); backdrop-filter: blur(10px);
         }
         .draw-panel.active { display: flex; }
         
         .draw-panel button {
-            background: #EF476F; color: white; border: none; padding: 10px;
+            background: #333; color: white; border: none; padding: 10px;
             border-radius: 10px; font-weight: bold; cursor: pointer; font-family: 'Nunito';
+            font-size: clamp(0.8rem, 1vw, 1rem);
         }
-        .draw-panel button:hover { background: #d83a5e; }
-        input[type="color"] { border: none; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; }
+        .draw-panel button:hover { background: #ef476f; }
+        input[type="color"] { border: none; width: 35px; height: 35px; border-radius: 50%; cursor: pointer; align-self: center;}
 
+        /* Kanvas Overlay */
         #drawCanvas {
             position: absolute; top: 0; left: 0; width: 100vw; height: 100vh;
             pointer-events: none; z-index: 50;
         }
         #drawCanvas.active { pointer-events: auto; cursor: crosshair; }
 
-        /* Video Modal */
-        .btn-play {
-            background: white; color: #04A77D; font-size: 2rem; font-weight: 900;
-            padding: 20px 40px; border-radius: 50px; border: none; cursor: pointer;
+        /* Tombol Pemutar Video */
+        .btn-action {
+            background: white; color: #04A77D; font-weight: 900;
+            font-size: clamp(1.2rem, 2vw, 1.8rem);
+            padding: clamp(10px, 2vh, 15px) clamp(20px, 4vw, 40px); 
+            border-radius: 50px; border: none; cursor: pointer;
             box-shadow: 0 10px 20px rgba(0,0,0,0.2); transition: transform 0.2s;
-            display: flex; align-items: center; gap: 15px; margin-top: 20px;
-            font-family: 'Nunito';
+            display: inline-flex; align-items: center; gap: 10px; font-family: 'Nunito';
+            margin-top: 2vh;
         }
-        .btn-play:hover { transform: scale(1.05); }
+        .btn-action:hover { transform: scale(1.05); }
 
+        /* Tombol Musik (Icon Simpel) */
+        .btn-audio { 
+            color: #333; 
+            width: clamp(50px, 5vw, 65px); 
+            height: clamp(50px, 5vw, 65px); 
+            padding: 0; border-radius: 50%; justify-content: center; 
+            font-size: clamp(1.5rem, 2vw, 2rem);
+            margin-top: 0;
+        }
+        .btn-audio.playing { background: #06D6A0; color: white; }
+
+        /* Modal Video Luas */
         .modal {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.9); z-index: 200; justify-content: center; align-items: center;
+            display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(0,0,0,0.95); z-index: 200; justify-content: center; align-items: center;
         }
         .modal.active { display: flex; }
         .modal-content {
-            width: 90%; max-width: 1200px; aspect-ratio: 16/9; position: relative;
+            width: 95vw; height: 90vh; position: relative;
+            display: flex; justify-content: center; align-items: center;
         }
-        .modal-content iframe { width: 100%; height: 100%; border-radius: 20px; border: none; }
+        .modal-content iframe { width: 100%; height: 100%; border-radius: 15px; border: none; }
         .close-modal {
-            position: absolute; top: -50px; right: 0; font-size: 3rem; color: white;
-            cursor: pointer; font-weight: bold; transition: color 0.2s;
+            position: absolute; top: -5px; right: 0px; font-size: clamp(2.5rem, 4vw, 3.5rem); 
+            color: white; cursor: pointer; font-weight: bold; transition: color 0.2s; z-index: 201;
+            background: rgba(0,0,0,0.5); width: 45px; height: 45px; border-radius: 50%;
+            display: flex; justify-content: center; align-items: center; padding-bottom: 5px;
         }
-        .close-modal:hover { color: #EF476F; }
-
-        /* Pemutar Audio Custom */
-        audio {
-            width: 400px; height: 50px; border-radius: 30px;
-            box-shadow: var(--shadow-soft);
-        }
-        audio::-webkit-media-controls-panel { background-color: var(--glass-bg); }
+        .close-modal:hover { color: #EF476F; background: white; }
     </style>
 </head>
 <body>
 
-    <div class="watermark">Disusun oleh: Ardika Riski Rahmawan, S.Pd. | SD Negeri 1 Godegan</div>
+    <div class="footer-identity">&copy; 2026 Ardika Riski Rahmawan, S.Pd. | SD Negeri 1 Godegan</div>
+
+    <button class="draw-toggle" onclick="toggleDrawMode()" title="Mode Tulis">✏️</button>
+    <div class="draw-panel" id="drawPanel">
+        <input type="color" id="penColor" value="#EF476F" title="Pilih Warna Spidol">
+        <button onclick="clearCanvas()">Hapus Coretan</button>
+    </div>
 
     <canvas id="drawCanvas"></canvas>
 
     <button class="nav-btn prev-btn" onclick="prevSlide()">&#10094;</button>
     <button class="nav-btn next-btn" onclick="nextSlide()">&#10095;</button>
 
-    <button class="draw-toggle" onclick="toggleDrawMode()" title="Mode Tulis">✏️</button>
-    <div class="draw-panel" id="drawPanel">
-        <input type="color" id="penColor" value="#EF476F" title="Pilih Warna Spidol">
-        <button onclick="clearCanvas()">Hapus Semua</button>
-    </div>
-
     <div class="modal" id="videoModal">
         <div class="modal-content">
-            <span class="close-modal" onclick="closeVideo()">×</span>
+            <span class="close-modal" onclick="closeVideo()" title="Tutup Video">×</span>
             <iframe id="zakatVideo" src="" allowfullscreen allow="autoplay"></iframe>
         </div>
     </div>
 
+    <audio id="bgMusic" src="instrumen-pelangi.mp3" loop></audio>
+
     <div class="slide-container">
         <div class="slide active" id="slide1">
             <h1>Indahnya Berbagi</h1>
-            <p>Mengenal 8 Golongan Penerima Zakat (Mustahik)</p>
+            <p style="color: #333; font-weight: 700;">Mengenal 8 Golongan Penerima Zakat (Mustahik)</p>
         </div>
 
         <div class="slide" id="slide2">
             <h2>Perjalanan Zakat Kita</h2>
             <p>Mari kita amati bersama, siapa saja yang berhak menerima bantuan zakat di masyarakat kita?</p>
-            <button class="btn-play" onclick="openVideo()">▶ Tonton Video Pembelajaran</button>
+            <button class="btn-action" onclick="openVideo()">▶ Putar Video</button>
         </div>
 
         <div class="slide" id="slide3">
             <h2>Lengkapi Peta Konsep Ini</h2>
             <div class="mindmap-wrapper">
-                <img src="https://drive.google.com/thumbnail?id=1RjT4e2hV0P8ewIlRrJvVyQrC5IobJOul&sz=w1200" alt="Peta Konsep Mustahik Zakat">
+                <img src="https://drive.google.com/thumbnail?id=1RjT4e2hV0P8ewIlRrJvVyQrC5IobJOul&sz=w1600" alt="Peta Konsep Mustahik Zakat">
             </div>
         </div>
 
         <div class="slide" id="slide4">
             <h2>8 Golongan Mustahik</h2>
-            <p style="margin-top: -10px; margin-bottom: 20px;">(Dinyanyikan dengan nada lagu: <b>Pelangi-Pelangi</b>)</p>
             <div class="lyrics-box">
                 Delapan mustahiq penerima zakat<br>
                 Fakir itu orang tidak punya harta<br>
@@ -199,10 +220,7 @@
                 Gharim punya utang, tidak bisa bayar<br>
                 Ibnu sabil itu, di perjalanan
             </div>
-            <audio controls loop>
-                <source src="instrumen-pelangi.mp3" type="audio/mpeg">
-                Browser Anda tidak mendukung pemutar audio.
-            </audio>
+            <button class="btn-action btn-audio" id="audioControlBtn" onclick="toggleAudio()" title="Putar Musik">🎵</button>
         </div>
     </div>
 
@@ -210,13 +228,22 @@
         // Logika Navigasi Slide
         let currentSlide = 0;
         const slides = document.querySelectorAll('.slide');
+        const audio = document.getElementById('bgMusic');
+        const audioBtn = document.getElementById('audioControlBtn');
 
         function showSlide(index) {
             slides.forEach((slide, i) => {
                 slide.classList.remove('active');
                 if (i === index) slide.classList.add('active');
             });
-            clearCanvas(); // Hapus coretan saat ganti slide
+            clearCanvas();
+            
+            if (!audio.paused) {
+                audio.pause();
+                audio.currentTime = 0;
+                audioBtn.innerHTML = "🎵";
+                audioBtn.classList.remove('playing');
+            }
         }
 
         function nextSlide() {
@@ -233,22 +260,34 @@
             }
         }
 
-        // Logika Modal Video
+        // Kontrol Audio
+        function toggleAudio() {
+            if (audio.paused) {
+                audio.play();
+                audioBtn.innerHTML = "⏸";
+                audioBtn.classList.add('playing');
+            } else {
+                audio.pause();
+                audioBtn.innerHTML = "🎵";
+                audioBtn.classList.remove('playing');
+            }
+        }
+
+        // Modal Video Maksimal
         const modal = document.getElementById('videoModal');
         const videoIframe = document.getElementById('zakatVideo');
 
         function openVideo() {
-            // Memasukkan URL Youtube beserta parameter autoplay
             videoIframe.src = "https://www.youtube.com/embed/o6-ZxWnWnwA?autoplay=1";
             modal.classList.add('active');
         }
 
         function closeVideo() {
             modal.classList.remove('active');
-            videoIframe.src = ""; // Mengosongkan SRC untuk mematikan video/audio
+            videoIframe.src = "";
         }
 
-        // Logika Kanvas (Mode Tulis)
+        // Kanvas Mode Tulis
         const canvas = document.getElementById('drawCanvas');
         const ctx = canvas.getContext('2d');
         let isDrawingMode = false;
@@ -257,7 +296,7 @@
         function resizeCanvas() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
-            ctx.lineWidth = 6;
+            ctx.lineWidth = 5;
             ctx.lineCap = 'round';
             ctx.lineJoin = 'round';
         }
@@ -272,13 +311,13 @@
             if (isDrawingMode) {
                 canvas.classList.add('active');
                 drawPanel.classList.add('active');
-                drawToggleBtn.style.background = "#EF476F"; 
-                drawToggleBtn.style.color = "white";
+                drawToggleBtn.classList.add('active');
+                drawToggleBtn.innerHTML = "✖";
             } else {
                 canvas.classList.remove('active');
                 drawPanel.classList.remove('active');
-                drawToggleBtn.style.background = "var(--glass-bg)";
-                drawToggleBtn.style.color = "#333";
+                drawToggleBtn.classList.remove('active');
+                drawToggleBtn.innerHTML = "✏️";
             }
         }
 
@@ -316,18 +355,15 @@
             ctx.closePath();
         }
 
-        // Event Listener Mouse
         canvas.addEventListener('mousedown', startDrawing);
         canvas.addEventListener('mousemove', draw);
         canvas.addEventListener('mouseup', stopDrawing);
         canvas.addEventListener('mouseout', stopDrawing);
 
-        // Event Listener Touch (Untuk layar sentuh IFP)
         canvas.addEventListener('touchstart', startDrawing, {passive: false});
         canvas.addEventListener('touchmove', draw, {passive: false});
         canvas.addEventListener('touchend', stopDrawing);
 
-        // Dukungan Keyboard (Geser slide pakai panah keyboard)
         document.addEventListener('keydown', (e) => {
             if (!isDrawingMode && !modal.classList.contains('active')) {
                 if (e.key === 'ArrowRight' || e.key === 'Space') nextSlide();
